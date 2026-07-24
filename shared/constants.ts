@@ -1,0 +1,4 @@
+export const CHAIN_ID = 11155111;
+
+export const APAX_TOKEN_ADDRESS =
+    "0xb5Dc021ED526A88Ca5926Cdbbe5b79BD77a1a8DE";

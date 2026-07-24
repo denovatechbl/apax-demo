@@ -1,0 +1,773 @@
+@import 'tailwindcss';
+
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* APAX Wealth Terminal - Institutional Grade Color System */
+  --background: #0A0A0A;
+  --foreground: #E8E8E8;
+  --card: #111111;
+  --card-foreground: #E8E8E8;
+  --popover: #111111;
+  --popover-foreground: #E8E8E8;
+  --primary: #D4AF37;
+  --primary-foreground: #0A0A0A;
+  --secondary: #1A1A1A;
+  --secondary-foreground: #C0C0C0;
+  --muted: #1A1A1A;
+  --muted-foreground: #888888;
+  --accent: #D4AF37;
+  --accent-foreground: #0A0A0A;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: #2A2A2A;
+  --input: #1A1A1A;
+  --ring: #D4AF37;
+  --chart-1: #D4AF37;
+  --chart-2: #C0C0C0;
+  --chart-3: #E5E4E2;
+  --chart-4: #B8860B;
+  --chart-5: #A9A9A9;
+  --radius: 0.5rem;
+  --sidebar: #0D0D0D;
+  --sidebar-foreground: #E8E8E8;
+  --sidebar-primary: #D4AF37;
+  --sidebar-primary-foreground: #0A0A0A;
+  --sidebar-accent: #1A1A1A;
+  --sidebar-accent-foreground: #D4AF37;
+  --sidebar-border: #2A2A2A;
+  --sidebar-ring: #D4AF37;
+
+  /* 5-Stop Gold Gradient Reference */
+  --gold-deep: #8B6914;
+  --gold-dark: #B8860B;
+  --gold: #D4AF37;
+  --gold-bright: #E6C861;
+  --gold-shine: #F4E4A6;
+
+  /* Institutional Silver */
+  --silver-dark: #8A8A8A;
+  --silver: #C0C0C0;
+  --silver-light: #E8E8E8;
+
+  /* Platinum */
+  --platinum: #E5E4E2;
+
+  /* Obsidian Base */
+  --obsidian: #0A0A0A;
+  --obsidian-light: #1A1A1A;
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Inter Fallback';
+  --font-serif: 'Playfair Display', 'Playfair Display Fallback';
+  --font-mono: 'JetBrains Mono', 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-dark: var(--gold-dark);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-shine: var(--gold-shine);
+  --color-silver: var(--silver);
+  --color-silver-dark: var(--silver-dark);
+  --color-silver-light: var(--silver-light);
+  --color-platinum: var(--platinum);
+  --color-obsidian: var(--obsidian);
+  --color-obsidian-light: var(--obsidian-light);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+
+    /* Global scrollbar for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.6) #0A0A0A;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    /* 1.6 leading for readability - avoiding crammed text */
+    line-height: 1.6;
+
+    /* Overlay scrolling (WebKit) to prevents layout shifts */
+    overflow-y: overlay;
+
+    /* 2% Noise texture - De-digitalizing */
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    /* SVG Noise Filter */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.02;
+    mix-blend-mode: overlay;
+  }
+}
+
+/* ========================================
+   TYPOGRAPHY - Institutional Weight
+   ======================================== */
+
+/* Playfair Display Headers - tight tracking for prestige */
+.font-serif {
+  letter-spacing: -0.02em;
+}
+
+
+
+/* Inter Medium-Book weight (450) for data - avoids generic bold/regular */
+.text-data {
+  font-weight: 450;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+/* Monospace for vault serials and hashes */
+.font-vault {
+  font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+  font-feature-settings: 'zero' on;
+  letter-spacing: 0.02em;
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR (Webkit) - "Ghost Gold"
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+  /* Matches obsidian background */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.6);
+  /* Brushed Gold, 0.6 opacity */
+  border-radius: 20px;
+  /* Fully rounded */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+  /* Full opacity on hover */
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  /* Glow effect */
+}
+
+/* Scrollbar Corner - clean hide */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+/* ========================================
+   BESPOKE ICONS - "De-Robot" Strategy
+   ======================================== */
+
+/* Target all Lucide icons globally */
+.lucide {
+  /* 1.5px stroke width for consistency */
+  stroke-width: 1.5px;
+  /* Primary color: Brushed Silver */
+  stroke: var(--silver);
+
+  /* The "Gold Dot" Accent - CSS Background Trick */
+  /* This creates a small gold radial gradient behind the icon in the top-right quadrant */
+  background-image: radial-gradient(circle at 75% 25%, rgba(212, 175, 55, 0.9) 0%, rgba(212, 175, 55, 0) 25%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  /* Smooth transitions for interactive feel */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover State: "Interactive Glow" */
+.lucide:hover,
+button:hover .lucide,
+a:hover .lucide {
+  /* Subtle gold aura */
+  filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.5));
+  stroke: #E8E8E8;
+  /* Brighten silver to white-hot */
+
+  /* Make the gold dot pulse slightly */
+  background-image: radial-gradient(circle at 75% 25%, rgba(212, 175, 55, 1) 0%, rgba(212, 175, 55, 0) 35%);
+}
+
+/* Active State Override (for Sidebar etc where icon is explicitly gold) */
+.text-primary .lucide,
+.text-\[\#D4AF37\] .lucide {
+  stroke: #D4AF37;
+  background-image: none;
+  /* Remove dot if icon is fully gold to avoid clutter */
+  filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.3));
+}
+
+/* ========================================
+   5-STOP GOLD GRADIENT - Real 24K Metal
+   ======================================== */
+
+.gradient-gold-5 {
+  background: linear-gradient(135deg,
+      #8B6914 0%,
+      #B8860B 25%,
+      #D4AF37 50%,
+      #E6C861 75%,
+      #F4E4A6 100%);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg,
+      #8B6914 0%,
+      #B8860B 20%,
+      #D4AF37 40%,
+      #E6C861 70%,
+      #F4E4A6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Horizontal gold bar gradient */
+.gradient-gold-bar {
+  background: linear-gradient(90deg,
+      #8B6914 0%,
+      #D4AF37 30%,
+      #F4E4A6 50%,
+      #D4AF37 70%,
+      #8B6914 100%);
+}
+
+/* ========================================
+   CUSTOM CUBIC-BEZIER TRANSITIONS
+   "Heavy Vault Door" Feel
+   ======================================== */
+
+.transition-vault {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 400ms;
+}
+
+.transition-vault-slow {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 700ms;
+}
+
+/* ========================================
+   GLASSMORPHISM - Refined
+   ======================================== */
+
+/* "Non-Solid" Border Strategy - Override standard glass */
+.glass {
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(16px);
+  /* 1px Linear Gradient Border */
+  border-width: 1px;
+  border-style: solid;
+  border-image: linear-gradient(to bottom right, #D4AF37, #C0C0C0, transparent) 1;
+  /* Fallback for border-radius with border-image (border-image kills radius) 
+     Using a different approach for rounded gradient borders if needed, 
+     but for now applying the requested style. 
+     Note: border-image prevents border-radius. 
+     Better approach for rounded cards is background-origin or pseudo-element.
+     Retaining generic border for now, overriding layout specific components.
+  */
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  /* Fallback */
+}
+
+/* Utility for the gradient border that supports radius (Mask implementation) */
+.border-gradient-gold {
+  position: relative;
+  background: linear-gradient(#111111, #111111) padding-box,
+    linear-gradient(to bottom right, #D4AF37, #C0C0C0, transparent) border-box;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+}
+
+.glass-heavy {
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+/* ========================================
+   GOLD GLOW & EFFECTS
+   ======================================== */
+
+.gold-glow {
+  box-shadow:
+    0 0 20px rgba(212, 175, 55, 0.15),
+    0 0 40px rgba(212, 175, 55, 0.05),
+    inset 0 1px 0 rgba(212, 175, 55, 0.1);
+}
+
+.gold-glow-intense {
+  box-shadow:
+    0 0 30px rgba(212, 175, 55, 0.3),
+    0 0 60px rgba(212, 175, 55, 0.15),
+    0 0 90px rgba(212, 175, 55, 0.05);
+}
+
+/* ========================================
+   INSTITUTIONAL DEPTH & TEXTURES
+   ======================================== */
+
+.inner-glow-gold {
+  box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1), 0 0 5px rgba(212, 175, 55, 0.05);
+}
+
+.brushed-metal {
+  background:
+    repeating-linear-gradient(90deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px),
+    linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #1A1A1A 100%);
+}
+
+.mesh-gradient-gold {
+  background: radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(184, 134, 11, 0.1) 0px, transparent 50%);
+}
+
+.institutional-shadow {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.03);
+}
+
+.text-terminal-sm {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* ========================================
+   BRUSHED METAL TEXTURE (Legacy kept for compatibility if used)
+   ======================================== */
+
+/* ========================================
+   SECURITY FEED STYLING (PoR)
+   ======================================== */
+
+.security-feed {
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, rgba(17, 17, 17, 0.9) 100%);
+  border-left: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.security-feed::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+}
+
+/* Vault Serial Number Styling */
+.vault-serial {
+  font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #D4AF37;
+  opacity: 0.8;
+}
+
+/* On-chain Hash Display */
+.chain-hash {
+  font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: #888888;
+  word-break: break-all;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+/* Verification Badge Pulse */
+@keyframes pulse-verification {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+    transform: scale(1.02);
+  }
+}
+
+.pulse-verification {
+  animation: pulse-verification 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Gold Shimmer - Refined */
+@keyframes shimmer-gold {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-gold {
+  background: linear-gradient(90deg,
+      #8B6914 0%,
+      #D4AF37 25%,
+      #F4E4A6 50%,
+      #D4AF37 75%,
+      #8B6914 100%);
+  background-size: 200% 100%;
+  animation: shimmer-gold 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Metallic Shine on Hover - Vault Door Feel */
+.metallic-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.metallic-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(212, 175, 55, 0) 35%,
+      rgba(244, 228, 166, 0.25) 50%,
+      rgba(212, 175, 55, 0) 65%,
+      transparent 100%);
+  transition: left 0s;
+}
+
+.metallic-shine:hover::after {
+  left: 200%;
+  transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Vault Door Opening */
+@keyframes vault-open-left {
+  0% {
+    transform: perspective(1200px) rotateY(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: perspective(1200px) rotateY(-95deg);
+    opacity: 0;
+  }
+}
+
+@keyframes vault-open-right {
+  0% {
+    transform: perspective(1200px) rotateY(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: perspective(1200px) rotateY(95deg);
+    opacity: 0;
+  }
+}
+
+.vault-door-left {
+  transform-origin: left center;
+  animation: vault-open-left 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.vault-door-right {
+  transform-origin: right center;
+  animation: vault-open-right 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Floating Animation - Subtle */
+@keyframes float-subtle {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.float-subtle {
+  animation: float-subtle 6s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* Live Feed Indicator */
+@keyframes live-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.live-indicator {
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+/* ========================================
+   RADIAL BACKGROUNDS
+   ======================================== */
+
+.bg-radial-obsidian {
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #1A1A1A 0%, #0A0A0A 70%);
+}
+
+.bg-radial-gold {
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+}
+
+/* ========================================
+   MARQUEE - Partner Logos
+   ======================================== */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* ========================================
+   BORDER EFFECTS
+   ======================================== */
+
+/* Subtle gold accent border */
+.border-gold-subtle {
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+/* ========================================
+   ASYMMETRIC CARD UTILITIES
+   ======================================== */
+
+.card-offset-1 {
+  transform: translateY(8px);
+}
+
+.card-offset-2 {
+  transform: translateY(-12px);
+}
+
+.card-offset-3 {
+  transform: translateY(4px);
+}
+
+/* Variable card heights for manual feel */
+.card-h-auto {
+  min-height: auto;
+}
+
+.card-h-md {
+  min-height: 180px;
+}
+
+.card-h-lg {
+  min-height: 220px;
+}
+
+.card-h-xl {
+  min-height: 280px;
+}
+
+/* ========================================
+   SIGNATURE EFFECT (Audit Verification)
+   ======================================== */
+
+.signature-scanned {
+  opacity: 0.7;
+  filter: contrast(1.2) grayscale(0.3);
+  font-family: 'Brush Script MT', cursive;
+  font-style: italic;
+}
+
+/* ========================================
+   SCANNING ANIMATION (PoR Security Feed)
+   ======================================== */
+
+@keyframes scan {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-scan {
+  animation: scan 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ========================================
+   LOADER ANIMATIONS (Vault Monolith)
+   ======================================== */
+
+.animate-ping-slow {
+  animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-slow-reverse {
+  animation: spin-reverse 12s linear infinite;
+}
+
+@keyframes radar-scan {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar {
+  animation: radar-scan 10s linear infinite;
+}
+
+@keyframes ticker-slide {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker-slide 30s linear infinite;
+}
+
+.stagger-in>* {
+  opacity: 0;
+  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-in>*:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stagger-in>*:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stagger-in>*:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stagger-in>*:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.stagger-in>*:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
