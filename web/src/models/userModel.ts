@@ -83,6 +83,25 @@ userSchema.pre<IUser>("save", async function (next) {
 
 
 /**
+ * Sign and return a JWT for this user.
+ * Payload includes the user id and email (per assessment spec).
+ * Secret and expiry come from environment variables — never hardcoded.
+ */
+userSchema.methods.getJWTToken = function (): string {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error("JWT_SECRET is not set in the environment");
+  }
+
+  const options: jwt.SignOptions = {
+    expiresIn: (process.env.JWT_EXPIRE || "7d") as jwt.SignOptions["expiresIn"],
+  };
+
+  return jwt.sign({ id: this._id, email: this.email }, secret, options);
+};
+
+/**
  * Compare password
  */
 userSchema.methods.comparePassword = async function (

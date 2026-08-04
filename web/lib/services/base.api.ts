@@ -1,3 +1,5 @@
+import { getToken } from '@/lib/auth';
+
 const baseUrl =
   process.env.NODE_ENV === 'production'
     ? ''
@@ -9,12 +11,20 @@ export interface ApiResponse {
   data?: any;
 }
 
-export const baseAPI = async (url: string, method: any, body?: unknown) => {
+export const baseAPI = async (
+  url: string,
+  method: any,
+  body?: unknown,
+  prefix: string = '/user'
+) => {
   try {
-    const res = await fetch(`${baseUrl}/user${url}`, {
+    const token = getToken();
+
+    const res = await fetch(`${baseUrl}${prefix}${url}`, {
       method,
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: method !== 'GET' && body ? JSON.stringify(body) : undefined,
     });

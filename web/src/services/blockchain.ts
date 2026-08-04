@@ -1,8 +1,6 @@
 import { ethers } from "ethers";
-import * as dotenv from "dotenv";
 
-dotenv.config();
-
+// Env vars are loaded once, centrally, in src/index.ts ("dotenv/config").
 export const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 
 export const contract = new ethers.Contract(

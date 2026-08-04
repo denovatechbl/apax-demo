@@ -4,10 +4,11 @@ const MONGO_URI = process.env.MONGO_URI as string;
 
 const connectDatabase = async (): Promise<void> => {
   try {
-    await mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as mongoose.ConnectOptions);
+    // `useNewUrlParser` / `useUnifiedTopology` were removed from the
+    // underlying MongoDB driver years ago — passing them now throws
+    // MongoParseError on connect. Modern mongoose/mongodb no longer need
+    // them at all.
+    await mongoose.connect(MONGO_URI);
 
     console.log("Mongoose Connected");
   } catch (error) {

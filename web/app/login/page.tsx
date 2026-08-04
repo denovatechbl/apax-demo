@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { loginApi } from '@/lib/services/login.api';
+import { setToken } from '@/lib/auth';
 
 export default function LoginPage() {
   const router = useRouter()
@@ -20,27 +21,28 @@ export default function LoginPage() {
   const [vaultOpening, setVaultOpening] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    // setIsLoading(true)
+    setError(null)
+    setIsLoading(true)
+
     const res = await loginApi({ email, password })
-    console.log(res)
-    //NEED TO CLEAN UP ONCE ALL DONE, didn't get time due to mongodb connection issue.
-    // Simulate authentication delay
-    // await new Promise(resolve => setTimeout(resolve, 1000))
 
-    // Trigger vault door animation
-    // setVaultOpening(true)
+    if (res.success && res.data?.token) {
+      setToken(res.data.token)
 
-    // Navigate after animation
-    // await new Promise(resolve => setTimeout(resolve, 1000))
-    // router.push('/dashboard')
-    if(res.data) {
-      router.push('/dashbaord')
-    } else {
-      alert('Something went wrong')
+      // Trigger vault door animation
+      setVaultOpening(true)
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      router.push('/dashboard')
+      return
     }
+
+    setIsLoading(false)
+    setError(res.message || 'Invalid email or password. Please try again.')
   }
 
   const handleWalletConnect = async () => {
@@ -208,6 +210,15 @@ export default function LoginPage() {
             {/* Email Tab */}
             <TabsContent value="email">
               <form onSubmit={handleLogin} className="space-y-4">
+                {error && (
+                  <div
+                    role="alert"
+                    className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400"
+                  >
+                    {error}
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-[#C0C0C0]">Email</Label>
                   <div className="relative">
@@ -219,6 +230,7 @@ export default function LoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="pl-10 bg-[#1A1A1A] border-[#2A2A2A] text-[#E8E8E8] placeholder:text-[#888888] focus:border-[#D4AF37] focus:ring-[#D4AF37]/20"
+                      disabled={isLoading}
                       required
                     />
                   </div>
@@ -235,6 +247,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="pl-10 pr-10 bg-[#1A1A1A] border-[#2A2A2A] text-[#E8E8E8] placeholder:text-[#888888] focus:border-[#D4AF37] focus:ring-[#D4AF37]/20"
+                      disabled={isLoading}
                       required
                     />
                     <button
