@@ -1,6 +1,6 @@
 # APAX Technical Assessment — Report
 
-Author: (agent-assisted changes — fill in your name / GitHub username / availability before submitting)
+Author: Denova Team
 
 This covers all three sections of `APAX_Technical_Assessment.md` (Frontend, Backend, Blockchain), plus a
 security issue found while reviewing the codebase that needed to be dealt with before anything else.
